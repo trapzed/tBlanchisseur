@@ -39,12 +39,25 @@ RegisterServerEvent("tBlanchisseur:finishedWashing")
 AddEventHandler("tBlanchisseur:finishedWashing", function(price)
 
     local _source = source
-    local xPlayer = ESX.GetPlayerFromId(source)
+    local playerPed = GetPlayerPed(_source)
+    
+    local xPlayer = ESX.GetPlayerFromId(_source)
+    local blackMoney = xPlayer.getAccount(Config.ArgentSale)
+
+    local playerPosition = GetEntityCoords(playerPed)
+    local dst = #(zoneBlanchisseur-playerPosition)
 
     local newPrice = price * Config.Percentage / 100
-    print(newPrice)
 
-    xPlayer.addMoney(newPrice)
+    if dst <= 3 then 
+
+        xPlayer.addMoney(newPrice)
+
+    else 
+
+        TriggerClientEvent(Config.Events["esx:showNotification"], _source, "~r~Action impossible")
+        
+    end
 
 end)
 
